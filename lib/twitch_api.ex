@@ -42,7 +42,7 @@ defmodule TwitchAPI do
     user_id = get_user_id_by_username(username)
     webhooks_hub_url = "#{@url}/webhooks/hub"
 
-    ip = System.get_env("IP")
+    ip = Application.get_env(:stream_live_bot, :ip)
     hub_data = %{
       "hub.callback" => "http://#{ip}:8000/stream_changes",
       "hub.mode" => "subscribe",
@@ -50,7 +50,7 @@ defmodule TwitchAPI do
       "hub.lease_seconds" => 864000,
     }
     IO.puts("Subscribing for stream updates...")
-    response = HTTPoison.post!(
+    _response = HTTPoison.post!(
       webhooks_hub_url,
       Poison.encode!(hub_data),
       @headers

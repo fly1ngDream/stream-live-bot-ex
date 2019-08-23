@@ -23,6 +23,11 @@
   #   tags: deploy
   #   args:
   #     chdir: ~/{{ project_name }}
+  - name: Get project deps
+    shell: mix deps.get
+    tags: deploy
+    args:
+      chdir: ~/{{ project_name }}
   - name: Compile project
     shell: mix deps.compile && mix.compile
     tags: deploy
