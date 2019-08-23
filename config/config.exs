@@ -1,7 +1,7 @@
 use Mix.Config
 
 config :stream_live_bot,
-  ecto_repos: [StreamLiveBot.Repo],
+  ecto_repos: [StreamLiveBot.Repo]
 
 config :stream_live_bot, StreamLiveBot.Repo,
   database: "stream_live_bot_repo",
