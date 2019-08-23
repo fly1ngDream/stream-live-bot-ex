@@ -19,18 +19,18 @@
       update: yes
       force: yes
       dest: ~/{{ project_name }}
-  # - name: Stop project
-  #   shell: pkill elixir
-  #   tags: deploy
-  #   args:
-  #     chdir: ~/{{ project_name }}
+  - name: Stop project
+    shell: pkill erl
+    tags: deploy
+    args:
+      chdir: ~/{{ project_name }}
   - name: Get project deps
     shell: mix deps.get
     tags: deploy
     args:
       chdir: ~/{{ project_name }}
-  - name: Compile project
-    shell: mix compile && mix deps.compile
+  - name: Release project
+    shell: MIX_ENV=prod mix release
     tags: deploy
     args:
       chdir: ~/{{ project_name }}
@@ -44,8 +44,8 @@
     tags: deploy
     args:
       chdir: ~/{{ project_name }}
-  - name: Run project
-    shell: MIX_ENV=prod elixir --name {{ project_name }}@yevhens-pc -S mix run --no-compile --no-halt
+  - name: Run project in daemon
+    shell: _build/prod/rel/stream_live_bot/bin/stream_live_bot daemon_iex
     tags: deploy
     args:
       chdir: ~/{{ project_name }}

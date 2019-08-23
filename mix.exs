@@ -30,6 +30,7 @@ defmodule StreamLiveBot.MixProject do
       {:ecto_sql, "~> 3.1"},
       {:postgrex, "~> 0.15"},
       {:sched_ex, "~> 1.0"},
+      {:jason, "~> 1.1.2"}
     ]
   end
 
