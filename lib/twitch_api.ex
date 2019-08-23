@@ -1,0 +1,60 @@
+defmodule TwitchAPI do
+  @url "https://api.twitch.tv/helix"
+  @headers [{"Client-ID", Application.get_env(:stream_live_bot, :client_id)}]
+
+  defmodule UsernameError do
+    defexception message: "Invalid username"
+  end
+
+  @doc """
+  Gets streamer's user id by username
+  """
+  def get_user_id_by_username(username) do
+    users_url = "#{@url}/users?login=#{username}"
+
+    response = users_url |> HTTPoison.get!(@headers)
+    users_data = response.body |> Poison.decode!() |> Map.get("data")
+
+    if users_data == [] do
+      raise UsernameError
+    else
+      users_data |> Enum.at(0) |> Map.get("id") |> String.to_integer()
+    end
+  end
+
+  @doc """
+  Checks if stream is online
+  """
+  def is_stream_online?(username) do
+    user_id = get_user_id_by_username(username)
+    streams_url = "#{@url}/streams?user_id=#{user_id}"
+
+    response = HTTPoison.get!(streams_url, @headers)
+    streams_data = response.body |> Poison.decode!() |> Map.get("data")
+
+    if streams_data != [], do: true, else: false
+  end
+
+  @doc """
+  Subscribes for stream changes using webhook
+  """
+  def subscribe_for_stream_changes(username) do
+    user_id = get_user_id_by_username(username)
+    webhooks_hub_url = "#{@url}/webhooks/hub"
+
+    ip = System.get_env("IP")
+    hub_data = %{
+      "hub.callback" => "http://#{ip}:8000/stream_changes",
+      "hub.mode" => "subscribe",
+      "hub.topic" => "#{@url}/streams?user_id=#{user_id}",
+      "hub.lease_seconds" => 864000,
+    }
+    IO.puts("Subscribing for stream updates...")
+    response = HTTPoison.post!(
+      webhooks_hub_url,
+      Poison.encode!(hub_data),
+      @headers
+    )
+    IO.puts("Subscribed.")
+  end
+end

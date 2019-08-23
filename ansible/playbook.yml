@@ -1,0 +1,35 @@
+---
+- hosts: all
+  vars:
+    project_name: stream-live-bot
+    repo_name: fly1ngDream/stream-live-bot-ex
+  tasks:
+  - name: Dependencies
+    tags: apt
+    apt: cache_valid_time=3600 name={{ packages }}
+    become: yes
+    vars:
+      packages:
+        - elixir
+  - name: Clone repo
+    tags: deploy
+    git:
+      repo: https://github.com/{{ repo_name }}
+      update: yes
+      force: yes
+      dest: ~/{{ project_name }}
+  # - name: Stop project
+  #   shell: pkill elixir
+  #   tags: deploy
+  #   args:
+  #     chdir: ~/{{ project_name }}
+  - name: Compile project
+    shell: mix deps.compile && mix.compile
+    tags: deploy
+    args:
+      chdir: ~/{{ project_name }}
+  - name: Run project
+    shell: MIX_ENV=prod elixir --name {{ project_name }}@yevhens-pc -S mix run --no-compile --no-halt
+    tags: deploy
+    args:
+      chdir: ~/{{ project_name }}
