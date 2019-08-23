@@ -41,15 +41,11 @@ defmodule StreamLiveBot.StreamStatus do
           "Stream started!\n#{twitch_streamer_link}"
         )
 
-        "STREAM_ONLINE" |> System.get_env() |> IO.puts()
-
       streams_data == [] ->
         System.put_env(
             "STREAM_ONLINE",
             "false"
         )
-
-        "STREAM_ONLINE" |> System.get_env() |> IO.puts()
 
       true -> nil
     end

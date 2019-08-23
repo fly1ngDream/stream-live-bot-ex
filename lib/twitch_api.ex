@@ -1,4 +1,6 @@
 defmodule TwitchAPI do
+  require Logger
+
   @url "https://api.twitch.tv/helix"
   @headers [{"Client-ID", Application.get_env(:stream_live_bot, :client_id)}]
 
@@ -49,12 +51,12 @@ defmodule TwitchAPI do
       "hub.topic" => "#{@url}/streams?user_id=#{user_id}",
       "hub.lease_seconds" => 864000,
     }
-    IO.puts("Subscribing for stream updates...")
+    Logger.log(:info, "Subscribing for stream updates...")
     _response = HTTPoison.post!(
       webhooks_hub_url,
       Poison.encode!(hub_data),
       @headers
     )
-    IO.puts("Subscribed.")
+    Logger.log(:info, "Subscribed.")
   end
 end
