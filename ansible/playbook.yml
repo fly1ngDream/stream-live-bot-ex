@@ -19,9 +19,17 @@
       update: yes
       force: yes
       dest: ~/{{ project_name }}
+  - name: Check if project is running
+    shell: pgrep erl
+    tags: deploy
+    register: check_project
+    failed_when: check_project.rc not in [0, 1]
+    args:
+      chdir: ~/{{ project_name }}
   - name: Stop project
     shell: pkill erl
     tags: deploy
+    when: check_project.rc == 0
     args:
       chdir: ~/{{ project_name }}
   - name: Get project deps
