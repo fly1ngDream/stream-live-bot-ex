@@ -4,7 +4,7 @@ defmodule StreamLiveBot.StreamStatus do
 
   @repo StreamLiveBot.Repo
 
-  plug Plug.Parsers, parsers: [:json], json_decoder: Poison
+  plug Plug.Parsers, parsers: [:json, :urlencoded], json_decoder: Poison
   plug :match
   plug :dispatch
 
