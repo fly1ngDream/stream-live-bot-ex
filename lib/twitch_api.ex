@@ -55,11 +55,14 @@ defmodule TwitchAPI do
 
     Logger.log(:info, "Subscribing for stream updates...")
 
-    HTTPoison.post!(
+    case HTTPoison.post(
       webhooks_hub_url,
       Poison.encode!(hub_data),
       @headers
-    )
+    ) do
+      {:ok, response} => Logger.log(:info, "Subscribed. #{response}")
+      {:error, reason} => Logger.log(:error, "Did't subscribe. #{response}")
+    end
 
     Logger.log(:info, "Subscribed.")
   end

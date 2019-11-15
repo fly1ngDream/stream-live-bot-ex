@@ -37,11 +37,6 @@
     tags: deploy
     args:
       chdir: ~/{{ project_name }}
-  - name: Release project
-    shell: MIX_ENV=prod mix release
-    tags: deploy
-    args:
-      chdir: ~/{{ project_name }}
   - name: Create db
     shell: mix ecto.create
     tags: deploy
@@ -49,6 +44,11 @@
       chdir: ~/{{ project_name }}
   - name: Migrate db
     shell: mix ecto.migrate
+    tags: deploy
+    args:
+      chdir: ~/{{ project_name }}
+  - name: Release project
+    shell: MIX_ENV=prod mix release
     tags: deploy
     args:
       chdir: ~/{{ project_name }}
