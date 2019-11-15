@@ -2,7 +2,10 @@ defmodule TwitchAPI do
   require Logger
 
   @url "https://api.twitch.tv/helix"
-  @headers [{"Client-ID", Application.get_env(:stream_live_bot, :client_id)}]
+  @headers [
+    {"Client-ID", Application.get_env(:stream_live_bot, :client_id)},
+    {"Content-Type", "application/json"}
+  ]
 
   defmodule UsernameError do
     defexception message: "Invalid username"
