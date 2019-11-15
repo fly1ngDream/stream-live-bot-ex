@@ -60,8 +60,8 @@ defmodule TwitchAPI do
       Poison.encode!(hub_data),
       @headers
     ) do
-      {:ok, response} => Logger.log(:info, "Subscribed. #{response}")
-      {:error, reason} => Logger.log(:error, "Did't subscribe. #{response}")
+      {:ok, response} -> Logger.log(:info, "Subscribed. #{response}")
+      {:error, reason} -> Logger.log(:error, "Did't subscribe. #{response}")
     end
 
     Logger.log(:info, "Subscribed.")
