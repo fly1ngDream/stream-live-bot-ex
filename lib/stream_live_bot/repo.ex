@@ -2,6 +2,7 @@ defmodule StreamLiveBot.Repo do
   use Ecto.Repo,
     otp_app: :stream_live_bot,
     adapter: Ecto.Adapters.Postgres
+
   import Ecto.Repo
   import Ecto.Query
   alias StreamLiveBot.Subscriber

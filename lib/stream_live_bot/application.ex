@@ -6,9 +6,7 @@ defmodule StreamLiveBot.Application do
     children = [
       {
         Plug.Cowboy,
-        scheme: :http,
-        plug: StreamLiveBot.StreamStatus,
-        options: [port: cowboy_port()]
+        scheme: :http, plug: StreamLiveBot.StreamStatus, options: [port: cowboy_port()]
       },
       StreamLiveBot.Repo,
       %{
@@ -20,11 +18,12 @@ defmodule StreamLiveBot.Application do
             TwitchAPI,
             :subscribe_for_stream_changes,
             [Application.get_env(:stream_live_bot, :streamer_username)],
-            "* * */9 * *"
+            "* * */6 * *"
           ]
         }
       }
     ]
+
     opts = [strategy: :one_for_one, name: StreamLiveBot.Supervisor]
 
     Logger.info("Starting stream status application...")
@@ -32,14 +31,15 @@ defmodule StreamLiveBot.Application do
     System.put_env(
       "STREAM_ONLINE",
       :stream_live_bot
-        |> Application.get_env(:streamer_username)
-        |> TwitchAPI.is_stream_online?()
-        |> to_string()
+      |> Application.get_env(:streamer_username)
+      |> TwitchAPI.is_stream_online?()
+      |> to_string()
     )
 
-    _response = TwitchAPI.subscribe_for_stream_changes(
-      Application.get_env(:stream_live_bot, :streamer_username)
-    )
+    _response =
+      TwitchAPI.subscribe_for_stream_changes(
+        Application.get_env(:stream_live_bot, :streamer_username)
+      )
 
     Supervisor.start_link(children, opts)
   end

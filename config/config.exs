@@ -10,6 +10,5 @@ config :stream_live_bot, StreamLiveBot.Repo,
 config :tg_bot,
   commands: StreamLiveBot.TelegramBot
 
-
 import_config "config.secret.exs"
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"

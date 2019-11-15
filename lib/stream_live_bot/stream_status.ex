@@ -4,9 +4,9 @@ defmodule StreamLiveBot.StreamStatus do
 
   @repo StreamLiveBot.Repo
 
-  plug Plug.Parsers, parsers: [:json, :urlencoded], json_decoder: Poison
-  plug :match
-  plug :dispatch
+  plug(Plug.Parsers, parsers: [:json, :urlencoded], json_decoder: Poison)
+  plug(:match)
+  plug(:dispatch)
 
   defp twitch_user_link(username), do: "twitch.tv/#{username}"
 
@@ -30,12 +30,13 @@ defmodule StreamLiveBot.StreamStatus do
     cond do
       streams_data != [] and stream_online == "false" ->
         System.put_env(
-            "STREAM_ONLINE",
-            "true"
+          "STREAM_ONLINE",
+          "true"
         )
-        twitch_streamer_link = twitch_user_link(
-            Application.get_env(:stream_live_bot, :streamer_username)
-        )
+
+        twitch_streamer_link =
+          twitch_user_link(Application.get_env(:stream_live_bot, :streamer_username))
+
         send_notifications(
           @repo.get_subscribers(),
           "Stream started!\n#{twitch_streamer_link}"
@@ -43,11 +44,12 @@ defmodule StreamLiveBot.StreamStatus do
 
       streams_data == [] ->
         System.put_env(
-            "STREAM_ONLINE",
-            "false"
+          "STREAM_ONLINE",
+          "false"
         )
 
-      true -> nil
+      true ->
+        nil
     end
 
     send_resp(conn, 200, "")

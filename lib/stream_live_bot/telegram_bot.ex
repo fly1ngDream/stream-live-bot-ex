@@ -12,7 +12,8 @@ defmodule StreamLiveBot.TelegramBot do
         IO.puts("* #{chat_id} subscribed.")
         send_message("You've subscribed for stream notifications.")
 
-      {:error, _changeset} -> send_message("You are already subscribed!")
+      {:error, _changeset} ->
+        send_message("You are already subscribed!")
     end
 
     IO.puts("* Subscribers count: #{@repo.get_subscribers_count()}.")
@@ -26,7 +27,8 @@ defmodule StreamLiveBot.TelegramBot do
         IO.puts("* #{chat_id} unsubscribed.")
         send_message("You've unsubscribed")
 
-      {:error, _changeset} -> send_message("You are not subscribed!")
+      {:error, _changeset} ->
+        send_message("You are not subscribed!")
     end
 
     IO.puts("* Subscribers count: #{@repo.get_subscribers_count()}.")

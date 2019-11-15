@@ -8,7 +8,7 @@ defmodule StreamLiveBot.MixProject do
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases(),
+      aliases: aliases()
     ]
   end
 
