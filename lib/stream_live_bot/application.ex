@@ -18,7 +18,7 @@ defmodule StreamLiveBot.Application do
             TwitchAPI,
             :subscribe_for_stream_changes,
             [Application.get_env(:stream_live_bot, :streamer_username)],
-            "* * */6 * *"
+            "0 0 */6 * *"
           ]
         }
       }
@@ -36,10 +36,9 @@ defmodule StreamLiveBot.Application do
       |> to_string()
     )
 
-    _response =
-      TwitchAPI.subscribe_for_stream_changes(
-        Application.get_env(:stream_live_bot, :streamer_username)
-      )
+    TwitchAPI.subscribe_for_stream_changes(
+      Application.get_env(:stream_live_bot, :streamer_username)
+    )
 
     Supervisor.start_link(children, opts)
   end

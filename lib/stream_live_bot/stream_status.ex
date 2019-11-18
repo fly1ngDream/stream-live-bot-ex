@@ -19,8 +19,13 @@ defmodule StreamLiveBot.StreamStatus do
 
   get "/stream_changed" do
     query_params = Plug.Conn.fetch_query_params(conn).query_params
+    challenge_token = Map.get(query_params, "hub.challenge")
 
-    send_resp(conn, 200, Map.get(query_params, "hub.challenge"))
+    if challenge_token do
+      send_resp(conn, 200, param)
+    else
+      send_resp(conn, 400, "Your URL doesn't contain 'hub.challenge' query parameter.")
+    end
   end
 
   post "/stream_changed" do

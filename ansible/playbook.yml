@@ -47,6 +47,11 @@
     tags: deploy
     args:
       chdir: ~/{{ project_name }}
+  - name: Remove _build directory
+    shell: rm -r _build
+    tags: deploy
+    args:
+      chdir: ~/{{ project_name }}
   - name: Release project
     shell: MIX_ENV=prod mix release
     tags: deploy
