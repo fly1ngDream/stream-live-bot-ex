@@ -32,8 +32,23 @@
     when: check_project.rc == 0
     args:
       chdir: ~/{{ project_name }}
+  - name: Remove _build directory
+    shell: rm -r _build
+    tags: deploy
+    args:
+      chdir: ~/{{ project_name }}
+  - name: Set MIX_ENV to prod
+    shell: export MIX_ENV=prod
+    tags: deploy
+    args:
+      chdir: ~/{{ project_name }}
   - name: Get project deps
     shell: mix deps.get
+    tags: deploy
+    args:
+      chdir: ~/{{ project_name }}
+  - name: Compile project
+    shell: mix compile
     tags: deploy
     args:
       chdir: ~/{{ project_name }}
@@ -47,13 +62,8 @@
     tags: deploy
     args:
       chdir: ~/{{ project_name }}
-  - name: Remove _build directory
-    shell: rm -r _build
-    tags: deploy
-    args:
-      chdir: ~/{{ project_name }}
   - name: Release project
-    shell: MIX_ENV=prod mix release
+    shell: mix release
     tags: deploy
     args:
       chdir: ~/{{ project_name }}
