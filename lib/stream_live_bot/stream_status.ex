@@ -1,6 +1,7 @@
 defmodule StreamLiveBot.StreamStatus do
   use Plug.Router
   use Plug.ErrorHandler
+  require Logger
 
   @repo StreamLiveBot.Repo
 

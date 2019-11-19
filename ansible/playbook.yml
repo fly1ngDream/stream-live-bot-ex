@@ -19,52 +19,52 @@
       repo: https://github.com/{{ repo_name }}
       update: yes
       force: yes
-      dest: {{ project_dir }}
+      dest: "{{ project_dir }}"
   - name: Check if project is running
     shell: pgrep erl
     tags: deploy
     register: check_project
     failed_when: check_project.rc not in [0, 1]
     args:
-      chdir: {{ project_dir }}
+      chdir: "{{ project_dir }}"
   - name: Stop project
     shell: pkill erl
     tags: deploy
     when: check_project.rc == 0
     args:
-      chdir: {{ project_dir }}
+      chdir: "{{ project_dir }}"
   - name: Remove _build directory
     shell: rm -r _build
     tags: deploy
     args:
-      chdir: {{ project_dir }}
+      chdir: "{{ project_dir }}"
   - name: Get project deps
     shell: mix deps.get
     tags: deploy
     args:
-      chdir: {{ project_dir }}
+      chdir: "{{ project_dir }}"
   - name: Compile project
     shell: MIX_ENV=prod mix compile
     tags: deploy
     args:
-      chdir: {{ project_dir }}
+      chdir: "{{ project_dir }}"
   - name: Create db
     shell: MIX_ENV=prod mix ecto.create
     tags: deploy
     args:
-      chdir: {{ project_dir }}
+      chdir: "{{ project_dir }}"
   - name: Migrate db
     shell: MIX_ENV=prod mix ecto.migrate
     tags: deploy
     args:
-      chdir: {{ project_dir }}
+      chdir: "{{ project_dir }}"
   - name: Release project
     shell: MIX_ENV=prod mix release
     tags: deploy
     args:
-      chdir: {{ project_dir }}
+      chdir: "{{ project_dir }}"
   - name: Run project in daemon
     shell: _build/prod/rel/stream_live_bot/bin/stream_live_bot daemon_iex
     tags: deploy
     args:
-      chdir: {{ project_dir }}
+      chdir: "{{ project_dir }}"
