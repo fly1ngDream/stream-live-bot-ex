@@ -34,6 +34,8 @@ defmodule StreamLiveBot.StreamStatus do
 
     cond do
       streams_data != [] and stream_online == "false" ->
+        Logger.info("Stream started")
+
         System.put_env(
           "STREAM_ONLINE",
           "true"
@@ -48,6 +50,8 @@ defmodule StreamLiveBot.StreamStatus do
         )
 
       streams_data == [] ->
+        Logger.info("Stream finished")
+
         System.put_env(
           "STREAM_ONLINE",
           "false"
@@ -58,6 +62,10 @@ defmodule StreamLiveBot.StreamStatus do
     end
 
     send_resp(conn, 200, "")
+  end
+
+  get "/online" do
+    send_resp(conn, 200, System.get_env("STREAM_ONLINE"))
   end
 
   match _ do
