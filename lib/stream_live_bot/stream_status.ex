@@ -23,7 +23,7 @@ defmodule StreamLiveBot.StreamStatus do
     challenge_token = Map.get(query_params, "hub.challenge")
 
     if challenge_token do
-      Logger.info("GET '/stream_changed' -> #{challenge_token}")
+      Logger.info("Server responded with a challenge token.")
 
       send_resp(conn, 200, challenge_token)
     else

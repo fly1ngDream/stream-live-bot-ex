@@ -1,6 +1,7 @@
 defmodule StreamLiveBot.TelegramBot do
   use Telegram.Router
   use Telegram.Commander
+  require Logger
 
   @repo StreamLiveBot.Repo
 
@@ -9,14 +10,14 @@ defmodule StreamLiveBot.TelegramBot do
 
     case @repo.add_subscriber(chat_id) do
       {:ok, _struct} ->
-        IO.puts("* #{chat_id} subscribed.")
+        Logger.info("* #{chat_id} subscribed.")
         send_message("You've subscribed for stream notifications.")
 
       {:error, _changeset} ->
         send_message("You are already subscribed!")
     end
 
-    IO.puts("* Subscribers count: #{@repo.get_subscribers_count()}.")
+    Logger.info("* Subscribers count: #{@repo.get_subscribers_count()}.")
   end
 
   command "stop" do
@@ -24,13 +25,13 @@ defmodule StreamLiveBot.TelegramBot do
 
     case @repo.remove_subscriber(chat_id) do
       {:ok, _struct} ->
-        IO.puts("* #{chat_id} unsubscribed.")
+        Logger.info("* #{chat_id} unsubscribed.")
         send_message("You've unsubscribed")
 
       {:error, _changeset} ->
         send_message("You are not subscribed!")
     end
 
-    IO.puts("* Subscribers count: #{@repo.get_subscribers_count()}.")
+    Logger.info("* Subscribers count: #{@repo.get_subscribers_count()}.")
   end
 end
