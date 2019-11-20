@@ -50,7 +50,7 @@ defmodule TwitchAPI do
     ip = Application.get_env(:stream_live_bot, :ip)
 
     hub_data = %{
-      "hub.callback" => "http://#{ip}:8000/stream_changes",
+      "hub.callback" => "http://#{ip}:8000/stream_changed",
       "hub.mode" => "subscribe",
       "hub.topic" => "#{@url}/streams?user_id=#{user_id}",
       "hub.lease_seconds" => 864_000
