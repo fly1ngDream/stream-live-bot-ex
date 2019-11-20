@@ -23,9 +23,9 @@ defmodule StreamLiveBot.StreamStatus do
     challenge_token = Map.get(query_params, "hub.challenge")
 
     if challenge_token do
-      send_resp(conn, 200, challenge_token)
-
       Logger.info("GET '/stream_changed' -> #{challenge_token}")
+
+      send_resp(conn, 200, challenge_token)
     else
       send_resp(conn, 400, "Your URL doesn't contain 'hub.challenge' query parameter.")
     end
